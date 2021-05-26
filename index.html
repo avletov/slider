@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#d33a2c" />
+  <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+  <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+  <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+  <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+  <title>Slider</title>
+</head>
+
+<body>
+  <div class="main">
+    <fieldset class="fieldset">
+      <legend class="ui-legend">Select:</legend>
+      <button class="ui-button active" id="selectColor">color</button>
+      <button class="ui-button" id="selectBackgroundColor">backgroundColor</button>
+    </fieldset>
+    <div style="display: flex; margin: 10px 0px;">
+      <div class="slider">
+        <div id="sliderRed"></div>
+        <div id="sliderGreen"></div>
+        <div id="sliderBlue"></div>
+      </div>
+      <div class="text" id="text">Etiamm libero neque, luctus a, eleifend nec, semper at, lorem. Sed pede. Nulla lorem
+        metus, adipiscing ut, luctus sed, hendrerit vitae, mi.</div>
+    </div>
+  </div>
+</body>
+
+<style>
+  body {
+    margin: 0px;
+    padding: 0px;
+  }
+
+  .main {
+    padding: 0px 10px;
+    min-width: 700px;
+  }
+
+  .fieldset {
+    width: 600px;
+  }
+
+  .slider {
+    display: flex;
+    flex-direction: column;
+    width: 300px;
+    padding: 10px;
+  }
+
+  .slider>div {
+    margin: 10px 0px;
+  }
+
+  .text {
+    margin: 0px 10px;
+    padding: 10px;
+    width: 300px;
+    border: 1px solid grey;
+    border-radius: 5px;
+    box-sizing: border-box;
+  }
+
+  .active {
+    background-color: #007fff;
+    border: 1px solid #003eff;
+  }
+
+  .ui-button:focus {
+    background-color: #007fff;
+    border: 1px solid #003eff;
+  }
+
+  #sliderRed .ui-slider-range {
+    background: #ef2929;
+  }
+
+  #sliderRed .ui-slider-handle {
+    border-color: #ef2929;
+    cursor: pointer;
+  }
+
+  #sliderGreen .ui-slider-range {
+    background: #8ae234;
+  }
+
+  #sliderGreen .ui-slider-handle {
+    border-color: #8ae234;
+    cursor: pointer;
+  }
+
+  #sliderBlue .ui-slider-range {
+    background: #729fcf;
+  }
+
+  #sliderBlue .ui-slider-handle {
+    border-color: #729fcf;
+    cursor: pointer;
+  }
+</style>
+
+<script>
+  const sliderConfig = {
+    min: 0,
+    max: 255,
+    animate: "slow",
+    range: "min",
+    slide: function (event, ui) { changeColor(event, ui); }
+  }
+
+  let type = 'color';
+
+  let colorRed = 0;
+  let colorGreen = 0;
+  let colorBlue = 0;
+  let backgroundColorRed = 255;
+  let backgroundColorGreen = 255;
+  let backgroundColorBlue = 255;
+
+  $('#selectColor').click(() => {
+    type = 'color';
+    $('#selectColor').addClass('active');
+    $('#selectBackgroundColor').removeClass('active');
+    renderSlider();
+  });
+
+  $('#selectBackgroundColor').click(() => {
+    type = 'backgroundColor';
+    $('#selectBackgroundColor').addClass('active');
+    $('#selectColor').removeClass('active');
+    renderSlider();
+  });
+
+  function renderSlider() {
+    $("#sliderRed").slider(
+      Object.assign(
+        sliderConfig,
+        type === 'color' ? { value: colorRed } : { value: backgroundColorRed }
+      ));
+    $("#sliderGreen").slider(
+      Object.assign(
+        sliderConfig,
+        type === 'color' ? { value: colorGreen } : { value: backgroundColorGreen }
+      ));
+    $("#sliderBlue").slider(
+      Object.assign(
+        sliderConfig,
+        type === 'color' ? { value: colorBlue } : { value: backgroundColorBlue }
+      ));
+  }
+
+  function applyColor() {
+    const textColor = `rgb(${colorRed}, ${colorGreen}, ${colorBlue})`;
+    const backgroundColor = `rgb(${backgroundColorRed}, ${backgroundColorGreen}, ${backgroundColorBlue})`;
+
+    $("#text").attr('style', `color: ${textColor}; background-color: ${backgroundColor}`);
+  }
+
+  function changeColor(event, ui) {
+    const { id } = event.target;
+    const { value } = ui;
+
+    if (id === 'sliderRed') {
+      type === 'color' ? colorRed = value : backgroundColorRed = value;
+    }
+
+    if (id === 'sliderGreen') {
+      type === 'color' ? colorGreen = value : backgroundColorGreen = value;
+    }
+
+    if (id === 'sliderBlue') {
+      type === 'color' ? colorBlue = value : backgroundColorBlue = value;
+    }
+
+    applyColor();
+  }
+
+  renderSlider();
+  applyColor();
+</script>
+
+</html>
